@@ -3,6 +3,12 @@ package Stringview
 import (
 	"errors"
 	"strings"
+
+	c "../Constants"
+
+	gb "../Gameboard"
+	gf "../Gamefields"
+	fo "../Gameobjects"
 )
 
 const (
@@ -30,27 +36,27 @@ const (
 
 func NewStringView() View {
 	return &stringView{
-		verticalBorders: map[Border]string{
-			WALL:      VERTICALWALL,
-			DOOR:      VERTICALDOOR,
-			FREE:      VERTICALFREE,
-			CROSSWALK: VERTICALCROSSWALK,
+		verticalBorders: map[c.Border]string{
+			c.WALL:      VERTICALWALL,
+			c.DOOR:      VERTICALDOOR,
+			c.FREE:      VERTICALFREE,
+			c.CROSSWALK: VERTICALCROSSWALK,
 		},
-		horizontalBorders: map[Border]string{
-			WALL:      HORIZONTALWALL,
-			DOOR:      HORIZONTALDOOR,
-			FREE:      HORIZONTALFREE,
-			CROSSWALK: HORIZONTALCROSSWALK,
+		horizontalBorders: map[c.Border]string{
+			c.WALL:      HORIZONTALWALL,
+			c.DOOR:      HORIZONTALDOOR,
+			c.FREE:      HORIZONTALFREE,
+			c.CROSSWALK: HORIZONTALCROSSWALK,
 		},
 	}
 }
 
 type stringView struct {
-	verticalBorders   map[Border]string
-	horizontalBorders map[Border]string
+	verticalBorders   map[c.Border]string
+	horizontalBorders map[c.Border]string
 }
 
-func (this *stringView) CompleteBoard(board Board) string {
+func (this *stringView) CompleteBoard(board gb.Board) string {
 	boardString := EMPTYSTRING
 
 	row := 0
@@ -62,8 +68,9 @@ func (this *stringView) CompleteBoard(board Board) string {
 
 		str := NEWLINE + NEWLINE
 
-		for col, field := range fields {
-			interior := this.fieldInterior(board.BoardObjectsByField(row, col))
+		for _, field := range fields {
+			fieldObjects := board.BoardObjectsByField(field)
+			interior := this.fieldInterior(fieldObjects)
 			str, _ = matchStringsByNewline(str, this.OneField(field, interior))
 		}
 
@@ -80,11 +87,11 @@ func (this *stringView) CompleteBoard(board Board) string {
 	}
 
 	row0, _ := board.FieldsByRow(0)
-	bottomborder := strings.Repeat(PIPE+HORIZONTALWALL, len(row0))
-	return boardString + NEWLINE + bottomborder + PIPE
+	bottomBorder := strings.Repeat(PIPE+HORIZONTALWALL, len(row0))
+	return boardString + NEWLINE + bottomBorder + PIPE
 }
 
-func (this *stringView) OneField(field Field, room string) string {
+func (this *stringView) OneField(field gf.Field, room string) string {
 	top, _ := this.horizontalBorders[field.TopBorder()]
 
 	left, _ := this.verticalBorders[field.LeftBorder()]
@@ -94,13 +101,13 @@ func (this *stringView) OneField(field Field, room string) string {
 	return PIPE + top + NEWLINE + body
 }
 
-func (this *stringView) fieldInterior(objectFeed <-chan FieldObject) string {
+func (this *stringView) fieldInterior(fieldObjects []fo.FieldObject) string {
 	room := EMPTYROOM
 
 	max := strings.Count(room, SPACE)
 
 	i := 1
-	for obj := range objectFeed {
+	for _, obj := range fieldObjects {
 		id := obj.AsString()
 		if i == max {
 			id = PLUS

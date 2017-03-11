@@ -1,26 +1,16 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-)
+	build "../TheGome/Builders"
+	view "../TheGome/Stringview"
 
-const (
-	LINEONE   = "__________"
-	LINETWO   = "|x _|  o |"
-	LINETHREE = "| |   O  |"
-	LINEFOUR  = "|_|_o__0_|"
+	"fmt"
 )
 
 func main() {
-	reader := bufio.NewReader(os.Stdin)
+	view := view.NewStringView()
+	board := build.BuildChapter00()
 
-	fmt.Println(LINEONE)
-	fmt.Println(LINETWO)
-	fmt.Println(LINETHREE)
-	fmt.Println(LINEFOUR)
-	text, _ := reader.ReadString('\n')
-	fmt.Println(text)
+	fmt.Println(view.CompleteBoard(board))
 	return
 }
