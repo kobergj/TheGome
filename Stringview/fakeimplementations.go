@@ -1,7 +1,8 @@
 package Stringview
 
 type FakeBoard struct {
-	fields map[int][]Field
+	fields       map[int][]Field
+	boardObjects []FieldObject
 }
 
 func (this *FakeBoard) FieldsByRow(i int) ([]Field, bool) {
@@ -9,23 +10,28 @@ func (this *FakeBoard) FieldsByRow(i int) ([]Field, bool) {
 	return fields, ok
 }
 
+func (this *FakeBoard) BoardObjectsByField(row, col int) <-chan FieldObject {
+	foChannel := make(chan FieldObject)
+
+	go func() {
+		defer close(foChannel)
+		for _, bo := range this.boardObjects {
+			if y, x := bo.Coordinates(); y == row && x == col {
+				foChannel <- bo
+			}
+		}
+	}()
+
+	return foChannel
+}
+
 type FakeField struct {
-	survivors []FieldObject
-	zombies   []FieldObject
-	cords     []int
-	borders   []Border
+	cords   []int
+	borders []Border
 }
 
 func (this *FakeField) Coordinates() (int, int) {
 	return this.cords[0], this.cords[1]
-}
-
-func (this *FakeField) Survivors() []FieldObject {
-	return this.survivors
-}
-
-func (this *FakeField) Zombies() []FieldObject {
-	return this.zombies
 }
 
 func (this *FakeField) LeftBorder() Border {
@@ -38,8 +44,13 @@ func (this *FakeField) TopBorder() Border {
 
 type FakeFieldObject struct {
 	identifier string
+	cords      []int
 }
 
 func (this *FakeFieldObject) AsString() string {
 	return this.identifier
+}
+
+func (this *FakeFieldObject) Coordinates() (int, int) {
+	return this.cords[0], this.cords[1]
 }

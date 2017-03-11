@@ -13,16 +13,17 @@ const (
 	EMPTYSTRING = ""
 	SPACE       = " "
 	PIPE        = "|"
+	PLUS        = "+"
 	// String Identifiers
 	HORIZONTALDOOR      = "- -"
 	HORIZONTALWALL      = "---"
 	HORIZONTALFREE      = "   "
 	HORIZONTALCROSSWALK = " = "
-	VERTICALDOOR        = "|\n \n|"
-	VERTICALWALL        = "|\n|\n|"
-	VERTICALFREE        = " \n \n "
-	VERTICALCROSSWALK   = "=\n=\n="
-	EMPTYROOM           = "   \n   \n   "
+	VERTICALDOOR        = "|\n "
+	VERTICALWALL        = "|\n|"
+	VERTICALFREE        = " \n "
+	VERTICALCROSSWALK   = "=\n="
+	EMPTYROOM           = "   \n   "
 	// Error Messages
 	ERR_STRINGSDONTMATCH = "Tried to concatenate multiline string, but failed"
 )
@@ -59,10 +60,11 @@ func (this *stringView) CompleteBoard(board Board) string {
 			break
 		}
 
-		str := NEWLINE + NEWLINE + NEWLINE
+		str := NEWLINE + NEWLINE
 
-		for _, field := range fields {
-			str, _ = matchStringsByNewline(str, this.OneField(field))
+		for col, field := range fields {
+			interior := this.fieldInterior(board.BoardObjectsByField(row, col))
+			str, _ = matchStringsByNewline(str, this.OneField(field, interior))
 		}
 
 		rowfinish := PIPE + NEWLINE + VERTICALWALL
@@ -82,27 +84,29 @@ func (this *stringView) CompleteBoard(board Board) string {
 	return boardString + NEWLINE + bottomborder + PIPE
 }
 
-func (this *stringView) OneField(field Field) string {
+func (this *stringView) OneField(field Field, room string) string {
 	top, _ := this.horizontalBorders[field.TopBorder()]
 
 	left, _ := this.verticalBorders[field.LeftBorder()]
-
-	room := this.fieldInterior(field)
 
 	body, _ := matchStringsByNewline(left, room)
 
 	return PIPE + top + NEWLINE + body
 }
 
-func (this *stringView) fieldInterior(field Field) string {
+func (this *stringView) fieldInterior(objectFeed <-chan FieldObject) string {
 	room := EMPTYROOM
 
-	for _, survivor := range field.Survivors() {
-		room = strings.Replace(room, SPACE, survivor.AsString(), 1)
-	}
+	max := strings.Count(room, SPACE)
 
-	for _, zombie := range field.Zombies() {
-		room = strings.Replace(room, SPACE, zombie.AsString(), 1)
+	i := 1
+	for obj := range objectFeed {
+		id := obj.AsString()
+		if i == max {
+			id = PLUS
+		}
+		room = strings.Replace(room, SPACE, id, 1)
+		i++
 	}
 
 	return room

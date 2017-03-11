@@ -20,187 +20,213 @@ func TestCompleteBoard(t *testing.T) {
 	}{
 		{
 			alias:          "One Row - One Field - Nothing Special",
-			expectedString: "|---|\n|   |\n|   |\n|   |\n|---|",
+			expectedString: "|---|\n|   |\n|   |\n|---|",
 			board: &FakeBoard{
 				map[int][]Field{
-					0: []Field{&FakeField{
-						[]FieldObject{},
-						[]FieldObject{},
-						[]int{1, 1},
-						[]Border{WALL, WALL, WALL, WALL},
-					},
+					0: []Field{
+						&FakeField{
+							[]int{0, 0},
+							[]Border{WALL, WALL, WALL, WALL},
+						},
 					},
 				},
+				[]FieldObject{},
 			},
 		},
 		{
 			alias:          "One Row - Two Fields seperated by door",
-			expectedString: "|---|---|\n|   |   |\n|       |\n|   |   |\n|---|---|",
+			expectedString: "|---|---|\n|   |   |\n|       |\n|---|---|",
 			board: &FakeBoard{
 				map[int][]Field{
 					0: []Field{
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 1},
+							[]int{0, 0},
 							[]Border{WALL, WALL},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 2},
+							[]int{0, 1},
 							[]Border{DOOR, WALL},
 						},
 					},
 				},
+				[]FieldObject{},
 			},
 		},
 		{
 			alias:          "Two Rows - Four Fields seperated by doors",
-			expectedString: "|---|---|\n|   |   |\n|       |\n|   |   |\n|- -|- -|\n|   |   |\n|       |\n|   |   |\n|---|---|",
+			expectedString: "|---|---|\n|   |   |\n|       |\n|- -|- -|\n|   |   |\n|       |\n|---|---|",
 			board: &FakeBoard{
 				map[int][]Field{
 					0: []Field{
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 1},
+							[]int{0, 0},
 							[]Border{WALL, WALL},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 2},
+							[]int{0, 1},
 							[]Border{DOOR, WALL},
 						},
 					},
 					1: []Field{
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{2, 1},
+							[]int{1, 0},
 							[]Border{WALL, DOOR},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{2, 2},
+							[]int{1, 1},
 							[]Border{DOOR, DOOR},
 						},
 					},
 				},
+				[]FieldObject{},
 			},
 		},
 		{
 			alias:          "Two Rows - Four Fields - Three Rooms",
-			expectedString: "|---|---|\n|   |   |\n|   |   |\n|   |   |\n|   |- -|\n|   |   |\n|       |\n|   |   |\n|---|---|",
+			expectedString: "|---|---|\n|   |   |\n|   |   |\n|   |- -|\n|   |   |\n|       |\n|---|---|",
 			board: &FakeBoard{
 				map[int][]Field{
 					0: []Field{
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 1},
+							[]int{0, 0},
 							[]Border{WALL, WALL},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 2},
+							[]int{0, 1},
 							[]Border{WALL, WALL},
 						},
 					},
 					1: []Field{
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{2, 1},
+							[]int{1, 0},
 							[]Border{WALL, FREE},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{2, 2},
+							[]int{1, 1},
 							[]Border{DOOR, DOOR},
 						},
 					},
 				},
+				[]FieldObject{},
 			},
 		},
 		{
 			alias:          "Two Rows - Six Fields - Crosswalk",
-			expectedString: "|---|---|---|\n|   |       |\n|   |       |\n|   |       |\n| = |- -|---|\n|   =   =   |\n|   =   =   |\n|   =   =   |\n|---|---|---|",
+			expectedString: "|---|---|---|\n|   |       |\n|   |       |\n| = |- -|---|\n|   =   =   |\n|   =   =   |\n|---|---|---|",
 			board: &FakeBoard{
 				map[int][]Field{
 					0: []Field{
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 1},
+							[]int{0, 0},
 							[]Border{WALL, WALL},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 2},
+							[]int{0, 1},
 							[]Border{WALL, WALL},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{1, 3},
+							[]int{0, 2},
 							[]Border{FREE, WALL},
 						},
 					},
 					1: []Field{
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{2, 1},
+							[]int{1, 0},
 							[]Border{WALL, CROSSWALK},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{2, 2},
+							[]int{1, 1},
 							[]Border{CROSSWALK, DOOR},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{},
-							[]int{2, 3},
+							[]int{1, 2},
 							[]Border{CROSSWALK, WALL},
 						},
 					},
 				},
+				[]FieldObject{},
 			},
 		},
 		{
 			alias:          "One Row - Two Fields - Zombs and Survivors",
-			expectedString: "|---|---|\n|ab |zzZ|\n|       |\n|   |   |\n|---|---|",
+			expectedString: "|---|---|\n|ab |zzy|\n|       |\n|---|---|",
 			board: &FakeBoard{
 				map[int][]Field{
 					0: []Field{
 						&FakeField{
-							[]FieldObject{
-								&FakeFieldObject{"a"},
-								&FakeFieldObject{"b"},
-							},
-							[]FieldObject{},
-							[]int{1, 1},
+							[]int{0, 0},
 							[]Border{WALL, WALL},
 						},
 						&FakeField{
-							[]FieldObject{},
-							[]FieldObject{
-								&FakeFieldObject{"z"},
-								&FakeFieldObject{"z"},
-								&FakeFieldObject{"Z"},
-							},
-							[]int{1, 2},
+							[]int{0, 1},
 							[]Border{DOOR, WALL},
 						},
 					},
+				},
+				[]FieldObject{
+					&FakeFieldObject{"a", []int{0, 0}},
+					&FakeFieldObject{"b", []int{0, 0}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"y", []int{0, 1}},
+				},
+			},
+		},
+		{
+			alias:          "Big Map - Lots of Zombs",
+			expectedString: "|---|---|---|---|\n|a  |zzz|y  |z  |\n|   |zz+        |\n|- -|---|---| = |\n|   =b  =   =   |\n|   =   =   =   |\n|---|---|---|---|",
+			board: &FakeBoard{
+				map[int][]Field{
+					0: []Field{
+						&FakeField{
+							[]int{0, 0},
+							[]Border{WALL, WALL},
+						},
+						&FakeField{
+							[]int{0, 1},
+							[]Border{WALL, WALL},
+						},
+						&FakeField{
+							[]int{0, 2},
+							[]Border{DOOR, WALL},
+						},
+						&FakeField{
+							[]int{0, 3},
+							[]Border{DOOR, WALL},
+						},
+					},
+					1: []Field{
+						&FakeField{
+							[]int{1, 0},
+							[]Border{WALL, DOOR},
+						},
+						&FakeField{
+							[]int{1, 1},
+							[]Border{CROSSWALK, WALL},
+						},
+						&FakeField{
+							[]int{1, 2},
+							[]Border{CROSSWALK, WALL},
+						},
+						&FakeField{
+							[]int{1, 3},
+							[]Border{CROSSWALK, CROSSWALK},
+						},
+					},
+				},
+				[]FieldObject{
+					&FakeFieldObject{"a", []int{0, 0}},
+					&FakeFieldObject{"b", []int{1, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"z", []int{0, 1}},
+					&FakeFieldObject{"y", []int{0, 2}},
+					&FakeFieldObject{"z", []int{0, 3}},
 				},
 			},
 		},

@@ -17,16 +17,14 @@ type View interface {
 type Board interface {
 	// Return the sections of the board
 	FieldsByRow(int) ([]Field, bool)
+	// The BoardObject inside the given Field
+	BoardObjectsByField(int, int) <-chan FieldObject
 }
 
 type Field interface {
 	// Borders
 	LeftBorder() Border
 	TopBorder() Border
-	// return survivors
-	Survivors() []FieldObject
-	// zombies
-	Zombies() []FieldObject
 	// Position of the Field inside the board
 	Coordinates() (int, int)
 }
@@ -34,4 +32,6 @@ type Field interface {
 type FieldObject interface {
 	// A String Identifier for the Object
 	AsString() string
+	// Position of the Object inside the board
+	Coordinates() (int, int)
 }
