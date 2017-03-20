@@ -1,10 +1,7 @@
 package Stringview
 
 import (
-	// c "../Constants"
 	gb "../Gameboard"
-	// gf "../Gamefields"
-	// fo "../Gameobjects"
 )
 
 // Main Implemented Interface

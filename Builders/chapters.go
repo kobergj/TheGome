@@ -4,6 +4,11 @@ import (
 	co "../Constants"
 	gb "../Gameboard"
 	gf "../Gamefields"
+	gob "../Gameobjects"
+)
+
+const (
+	IDENTIFIER_SURVIVOR = "s"
 )
 
 func BuildChapter00() gb.Board {
@@ -57,6 +62,9 @@ func BuildChapter00() gb.Board {
 
 	field = gf.NewField(co.CROSSWALK, co.DOOR)
 	board.AddField(field)
+	survivor := gob.NewFieldObject(IDENTIFIER_SURVIVOR)
+	survivor.Move(field)
+	board.AddFieldObject(survivor)
 
 	field = gf.NewField(co.CROSSWALK, co.CROSSWALK)
 	board.AddField(field)

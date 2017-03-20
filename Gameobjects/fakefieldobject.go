@@ -21,3 +21,7 @@ func (this *FakeFieldObject) Alive() bool {
 func (this *FakeFieldObject) CurrentField() gf.Field {
 	return this.Current
 }
+
+func (this *FakeFieldObject) Move(field gf.Field) {
+	return
+}

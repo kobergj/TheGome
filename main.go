@@ -2,15 +2,20 @@ package main
 
 import (
 	build "../TheGome/Builders"
+	cntr "../TheGome/Controller"
 	view "../TheGome/Stringview"
-
-	"fmt"
 )
 
 func main() {
+	controller := cntr.NewController()
 	view := view.NewStringView()
 	board := build.BuildChapter00()
 
-	fmt.Println(view.CompleteBoard(board))
+	controller.VisualizeString(view.CompleteBoard(board))
+
+	err := controller.ExecuteInput()
+	if err != nil {
+		panic(err)
+	}
 	return
 }
